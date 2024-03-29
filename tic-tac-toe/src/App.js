@@ -7,7 +7,7 @@ function Board() {
   const [nextValue, setNextValue] = React.useState(calculateNextValue(squares));
 
   function selectSquare(square) {
-    if(squares[square]) return;
+    if (squares[square]) return;
 
     const nextSquares = squares.slice();
     nextSquares[square] = nextValue;
@@ -34,26 +34,26 @@ function Board() {
   const status = calculateStatus(winner, squares, nextValue);
 
   return (
-    <div>
-      <div >{status}</div>
-      <div >
+    <div >
+      <div className='text-black text-5xl mb-2 font-bold text-center'>TIC TAC TOE</div>
+      <div className='text-black text-xl font-bold text-center'>{status}</div>
+      <div className='container aspect-square mx-auto max-w-lg columns-3'>
         {renderSquare(0)}
         {renderSquare(1)}
         {renderSquare(2)}
-      </div>
-      <div >
         {renderSquare(3)}
         {renderSquare(4)}
         {renderSquare(5)}
-      </div>
-      <div >
         {renderSquare(6)}
         {renderSquare(7)}
         {renderSquare(8)}
       </div>
-      <button onClick={restart}>
-        restart
-      </button>
+
+      <div className='grid place-content-center'>
+        <button className='border-4 border-blue-200 text-white p-4 rounded-lg bg-blue-600 hover:bg-blue-800' onClick={restart}>
+          restart
+        </button>
+      </div>
     </div>
   );
 }
