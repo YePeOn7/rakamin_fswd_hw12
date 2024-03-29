@@ -7,7 +7,7 @@ function Board() {
   const [nextValue, setNextValue] = React.useState(calculateNextValue(squares));
 
   function selectSquare(square) {
-    if (squares[square]) return;
+    if (squares[square] || calculateWinner(squares)) return;
 
     const nextSquares = squares.slice();
     nextSquares[square] = nextValue;
@@ -22,31 +22,41 @@ function Board() {
     setNextValue(calculateNextValue(nextSquares));
   }
 
-  function renderSquare(i) {
-    return (
-      <button className="square" onClick={() => selectSquare(i)}>
-        {squares[i]}
-      </button>
-    );
+  function renderSquare(i, win, props) {
+    if(win){
+      return (
+        <button className="square-win" {...props} onClick={() => selectSquare(i)}>
+          {squares[i]}
+        </button>
+      );
+    }
+    else{
+      return (
+        <button className="square" {...props} onClick={() => selectSquare(i)}>
+          {squares[i]}
+        </button>
+      );
+    }
   }
 
   const winner = calculateWinner(squares);
   const status = calculateStatus(winner, squares, nextValue);
+  console.log()
 
   return (
     <div >
       <div className='text-black text-5xl mb-2 font-bold text-center'>TIC TAC TOE</div>
       <div className='text-black text-xl font-bold text-center'>{status}</div>
       <div className='container aspect-square mx-auto max-w-lg columns-3'>
-        {renderSquare(0)}
-        {renderSquare(1)}
-        {renderSquare(2)}
-        {renderSquare(3)}
-        {renderSquare(4)}
-        {renderSquare(5)}
-        {renderSquare(6)}
-        {renderSquare(7)}
-        {renderSquare(8)}
+        {Array(9).fill().map((_, i) => {
+          if(!winner){
+            return renderSquare(i,0, {key: i});
+          }
+          else{
+            return renderSquare(i,winner.pattern.includes(i), {key: i});
+          }
+        })}
+
       </div>
 
       <div className='grid place-content-center'>
@@ -71,7 +81,7 @@ function Game() {
 // eslint-disable-next-line no-unused-vars
 function calculateStatus(winner, squares, nextValue) {
   return winner
-    ? `Winner: ${winner}`
+    ? `Winner: ${winner.winner}`
     : squares.every(Boolean)
       ? `Scratch: Cat's game`
       : `Next player: ${nextValue}`;
@@ -97,7 +107,10 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      return {
+        winner: squares[a],
+        pattern: [a, b, c]
+      }
     }
   }
   return null;

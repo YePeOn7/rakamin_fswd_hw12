@@ -5,3 +5,7 @@
 .square{
     @apply w-full border-solid border-4 text-4xl font-bold border-blue-100 aspect-square text-black bg-blue-400 rounded-2xl align-middle hover:bg-blue-500;
 }
+
+.square-win{
+    @apply w-full border-solid border-4 text-4xl font-bold border-orange-100 aspect-square text-black bg-orange-500 rounded-2xl align-middle;
+}
